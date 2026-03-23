@@ -57,7 +57,7 @@ module pe_optimized (
     always @(posedge mac_clk or posedge reset) begin
         if (reset) begin
             acc <= 0;
-        end else begin
+        end else if (enable_mac) begin
             acc <= acc + mult;
         end
     end
