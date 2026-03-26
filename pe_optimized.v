@@ -31,11 +31,7 @@ module pe_optimized (
     // --- 3. INTEGRATED CLOCK GATING (ICG) ---
     // Glitch-free latch for the heavy accumulator
     wire enable_mac = !skip_mac;
-    reg cg_latch;
-    always @(clk or enable_mac) begin
-        if (!clk) cg_latch = enable_mac;
-    end
-    wire mac_clk = clk & cg_latch;
+   
 
     // --- 4. DATAPATH ---
     // Data forwarding (Runs on main continuous clock)
@@ -61,7 +57,7 @@ module pe_optimized (
     always @(posedge mac_clk or posedge reset) begin
         if (reset) begin
             acc <= 0;
-        end else begin
+        end else if (enable_mac) begin
             acc <= acc + mult;
         end
     end
